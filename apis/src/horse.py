@@ -23,8 +23,8 @@ def clean_horse(horse: Dict) -> Union[Horse, None]:
         'sire': horse['sire'],
         'transponder': horse['transponder'],
         'owner': horse['owner'],
-        'entry_date': horse['entry_date'],
+        'incoming_at': horse['incoming_at'],
         'incoming_from': horse['incoming_from'],
-        'outgoing_date': horse['outgoing_date'],
+        'outgoing_at': horse['outgoing_at'],
         'outgoing_to': horse['outgoing_to']
     }
