@@ -4,7 +4,14 @@ import './App.css';
 
 function horses(setRes){
   const axios = require('axios');
-  axios.get('http://localhost:5000/horses').then(r => setRes(r.data));
+  axios.get('http://localhost:5000/horses').then(data => {
+    const horsesData = data.data;
+    if (horsesData) {
+      const horsesFields = horsesData.fields;
+      const horsesValues = horsesData.data;
+      setRes(horsesFields, horsesValues)
+    }
+  }).catch(e => console.error(e));
 }
 
 function GenericLine(fields, data){
@@ -13,9 +20,7 @@ function GenericLine(fields, data){
   );
 }
 
-function GenericTable(data){
-  const fields = data.data && data.data.fields;
-  const values = data.data && data.data.data;
+function GenericTable({fields, values}){
   return (
     <table>
       <thead>
@@ -36,19 +41,20 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      horses: null
+      horsesFields: null,
+      horsesValues: null
     };
-    horses(r => this.setState({horses: r}));
+    horses((f, v) => this.setState({horsesFields: f, horsesValues: v}));
   }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <GenericTable data={this.state.horses}/>
+          <GenericTable
+            fields={this.state.horsesFields}
+            values={this.state.horsesValues}
+          />
         </header>
       </div>
     );
