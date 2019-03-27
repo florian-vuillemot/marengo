@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-
-function horses(setRes){
-  const axios = require('axios');
-  axios.get('http://localhost:5000/horses').then(data => {
-    const horsesData = data.data;
-    if (horsesData) {
-      const horsesFields = horsesData.fields;
-      const horsesValues = horsesData.data;
-      setRes(horsesFields, horsesValues)
-    }
-  }).catch(e => console.error(e));
-}
+import Horses from './lib/Horses';
 
 function GenericLine(fields, data){
   return (
@@ -36,28 +25,14 @@ function GenericTable({fields, values}){
   );
 }
 
-class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      horsesFields: null,
-      horsesValues: null
-    };
-    horses((f, v) => this.setState({horsesFields: f, horsesValues: v}));
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <header className="App-body">
-          <GenericTable
-            fields={this.state.horsesFields}
-            values={this.state.horsesValues}
-          />
-        </header>
+function App(){
+  return (
+    <div className="App">
+      <div className="App-body">
+        <Horses table={GenericTable} />
       </div>
-    );
-  }
+    </div>
+  )
 }
 
 export default App;
