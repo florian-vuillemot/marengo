@@ -4,16 +4,17 @@ import Horses from './lib/Horses';
 
 const GenericValue = (fields, data, selectColumn, columnSelected) =>
   fields.map((f, idx) => {
-    const value = data[f.key];
-    const _td = (rd) => (<td key={idx} onClick={() => selectColumn(idx)}>{rd}</td>);
+    const value = data[f.key] || null;
+    const _td = rd => <td key={idx} onClick={() => selectColumn(idx)}>{rd}</td>;
     const _input = () => <input type="text" defaultValue={value} />;
     return _td(columnSelected === idx ? _input() : value);
   });
 
-const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, columnSelected) =>
+const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, columnSelected, idxStart) =>
   values.map((value, idx) => {
-    const _tr = (_td) => <tr key={idx} onClick={() => selectRow(idx)} >{_td}</tr>;
-    const _columnSelected = idx === rowSelected ? columnSelected : null;
+    const _idx = idxStart + idx;
+    const _tr = _td => <tr key={_idx} onClick={() => selectRow(_idx)} >{_td}</tr>;
+    const _columnSelected = _idx === rowSelected ? columnSelected : null;
     return _tr(GenericValue(fields, value, selectColumn, _columnSelected));
   });
 
@@ -35,8 +36,9 @@ class GenericTable extends Component {
     const rowSelected = this.state.rowSelected;
     const columnSelected = this.state.columnSelected;
 
-    const selectRow = (id) => this.setState({rowSelected: id});
-    const selectColumn = (id) => this.setState({columnSelected: id});
+    const selectRow = id => this.setState({rowSelected: id});
+    const selectColumn = id => this.setState({columnSelected: id});
+    const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart);
     
     return (
       <table className="Generic-table">
@@ -46,8 +48,11 @@ class GenericTable extends Component {
           </tr>
         </thead>
         <tbody>
-          {GenericValues(fields, values, selectRow, selectColumn, rowSelected, columnSelected)}
+          {_GenericValue(values, 0)}
         </tbody>
+        <tfoot>
+          {_GenericValue([{}], values.length)}
+        </tfoot>
       </table>
     );
   }
