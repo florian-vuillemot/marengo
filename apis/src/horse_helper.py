@@ -24,22 +24,22 @@ def _horse_format():
             'key': 'name',
             'name': 'Nom',
             'description': 'Le nom du cheval',
-            'type': 'string'
+            'type': 'text'
         },{
             'key': 'sire',
             'name': 'N° SIRE',
             'description': 'Le numéro de SIRE du cheval',
-            'type': 'string'
+            'type': 'text'
         },{
             'key': 'transponder',
             'name': 'N° Transpondeur',
             'description': 'Le numéro de transpondeur du cheval',
-            'type': 'string'
+            'type': 'text'
         },{
             'key': 'owner',
             'name': 'Propriétaire',
             'description': 'Nom et coordonnées du propriétaire',
-            'type': 'string'
+            'type': 'text'
         },{
             'key': 'incoming_at',
             'name': 'Entrée',
@@ -49,7 +49,7 @@ def _horse_format():
             'key': 'incoming_from',
             'name': 'Provenance',
             'description': "Adresse de provenance de l'animal",
-            'type': 'string'
+            'type': 'text'
         },{
             'key': 'outgoing_at',
             'name': 'Sortie',
@@ -59,6 +59,6 @@ def _horse_format():
             'key': 'outgoing_to',
             'name': 'Destination',
             'description': "Adresse de destination de l'animal lors de la sortie définitive du centre",
-            'type': 'string'
+            'type': 'text'
         }
     ]
