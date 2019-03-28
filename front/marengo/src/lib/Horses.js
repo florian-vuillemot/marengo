@@ -21,7 +21,25 @@ class Horses extends Component {
       horsesFields: null,
       horsesValues: null
     };
+
     getHorses((f, v) => this.setState({horsesFields: f, horsesValues: v}));
+    this.updateValue = this.updateValue.bind(this);
+  }
+
+  updateValue(idx, field, value) {
+    let horses = null;
+    const horsesValues = this.state.horsesValues;
+    
+    if (idx < horsesValues.length){
+      const horseUpdate = {...horsesValues[idx], [field.key]: value};
+      horses = horsesValues.map((h, _idx) => _idx === idx ? horseUpdate : h);
+    }
+    else {
+      horses = [...this.state.horsesValues, {[field.key]: value}];
+    }
+    this.setState({
+      horsesValues: horses
+    });
   }
 
   render() {
@@ -29,7 +47,8 @@ class Horses extends Component {
         <main>
             {this.props.table({
                 fields: this.state.horsesFields,
-                values: this.state.horsesValues
+                values: this.state.horsesValues,
+                updateValue: this.updateValue
             })}
         </main>
     );
