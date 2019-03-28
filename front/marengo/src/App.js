@@ -53,9 +53,7 @@ class GenericTable extends Component {
   }
 }
 
-function GenericTableWrapper({fields, values}) {
-  return <GenericTable fields={fields} values={values} />
-}
+const GenericTableWrapper = ({fields, values}) => <GenericTable fields={fields} values={values} />;
 
 function App(){
   return (
