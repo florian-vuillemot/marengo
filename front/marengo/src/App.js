@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import './App.css';
 import Horses from './lib/Horses';
 
-function GenericLine(fields, data, columnSelected, selectColumn){
-  return (
-    fields.map((f, idx) => {
-      if (columnSelected === idx){
-        return (<td key={idx}><input type="text" defaultValue={data[f.key]} /></td>);
-      }
-      return (<td key={idx} onClick={() => selectColumn(idx)}>{data[f.key]}</td>);
-    })
-  );
-}
+const GenericValue = (fields, data, selectColumn, columnSelected) =>
+  fields.map((f, idx) => {
+    const value = data[f.key];
+    const _td = (rd) => (<td key={idx} onClick={() => selectColumn(idx)}>{rd}</td>);
+    const _input = () => <input type="text" defaultValue={value} />;
+    return _td(columnSelected === idx ? _input() : value);
+  });
+
+const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, columnSelected) =>
+  values.map((value, idx) => {
+    const _tr = (_td) => <tr key={idx} onClick={() => selectRow(idx)} >{_td}</tr>;
+    const _columnSelected = idx === rowSelected ? columnSelected : null;
+    return _tr(GenericValue(fields, value, selectColumn, _columnSelected));
+  });
+
+const getViewFields = (fields) => (fields && fields.map(field => <th key={field.name}>{field.name}</th>));
 
 class GenericTable extends Component {
   constructor(props) {
@@ -21,43 +27,26 @@ class GenericTable extends Component {
       rowSelected: null,
       columnSelected: null,
     };
-
-    this.selectRow = this.selectRow.bind(this);
-    this.selectColumn = this.selectColumn.bind(this);
   }
 
-  selectRow = (id) => this.setState({rowSelected: id});
-  selectColumn = (id) => this.setState({columnSelected: id});
-
   render() {
-    const fields = this.props.fields;
-    const values = this.props.values;
+    const fields = this.props.fields || [];
+    const values = this.props.values || [];
+    const rowSelected = this.state.rowSelected;
+    const columnSelected = this.state.columnSelected;
+
+    const selectRow = (id) => this.setState({rowSelected: id});
+    const selectColumn = (id) => this.setState({columnSelected: id});
     
     return (
       <table className="Generic-table">
         <thead>
           <tr>
-          {fields &&
-            fields.map(field => <th key={field.name}>{field.name}</th>)}
+            {getViewFields(fields)}
           </tr>
         </thead>
         <tbody>
-          {values &&
-            values.map((value, idx) => {
-              if (idx === this.state.rowSelected) {
-                return (
-                  <tr key={idx}>{
-                    GenericLine(fields, value, this.state.columnSelected, this.selectColumn)
-                  }</tr>
-                );
-              }
-              return (
-                <tr key={idx} onClick={() => this.selectRow(idx)}>{
-                  GenericLine(fields, value, null, this.selectColumn)
-                }</tr>
-              );
-            }
-            )}
+          {GenericValues(fields, values, selectRow, selectColumn, rowSelected, columnSelected)}
         </tbody>
       </table>
     );
