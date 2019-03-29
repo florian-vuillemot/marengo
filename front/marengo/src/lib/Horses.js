@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+const axios = require('axios');
 
 function getHorses(setHorses){
-  const axios = require('axios');
   axios.get('http://localhost:5000/horses').then(data => {
     const horsesData = data.data;
 
@@ -15,7 +15,9 @@ function getHorses(setHorses){
 }
 
 function saveHorses(horses) {
-  console.log(horses);
+  axios.post('http://localhost:5000/horses/update', horses).then(data => {
+    console.log(data);
+  });
 }
 
 class Horses extends Component {
