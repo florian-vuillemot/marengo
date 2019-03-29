@@ -7,7 +7,7 @@ const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, update
     const value = data[f.key] || null;
     const _td = rd => <td key={idx} onClick={() => selectColumn(idx)}>{rd}</td>;
     const _onChange = e => updateValue(rowIdx, f, e.target.value);
-    const _input = () => <input type={f.type} defaultValue={value} onChange={e => _onChange(e)}/>;
+    const _input = () => <input type={f.type} defaultValue={value} onChange={e => _onChange(e)} autoFocus/>;
     return _td(columnSelected === idx ? _input() : value);
   });
 
