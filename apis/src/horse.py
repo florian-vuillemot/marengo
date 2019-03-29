@@ -17,14 +17,23 @@ def add_horse(horse: Horse) -> Dict[str, List[Union[Dict, Horse]]]:
     write_in_horses_file(hs)
     return hs
 
+def update_horses(new_horses: List[Horse]) -> Dict[str, List[Union[Dict, Horse]]]:
+    hs = horses()
+    hs['data'] = new_horses
+    write_in_horses_file(hs)
+    return hs
+
 def clean_horse(horse: Dict) -> Union[Horse, None]:
     return {
-        'name': horse['name'],
-        'sire': horse['sire'],
-        'transponder': horse['transponder'],
-        'owner': horse['owner'],
-        'incoming_at': horse['incoming_at'],
-        'incoming_from': horse['incoming_from'],
-        'outgoing_at': horse['outgoing_at'],
-        'outgoing_to': horse['outgoing_to']
+        'name': horse.get('name'),
+        'sire': horse.get('sire'),
+        'transponder': horse.get('transponder'),
+        'owner': horse.get('owner'),
+        'incoming_at': horse.get('incoming_at'),
+        'incoming_from': horse.get('incoming_from'),
+        'outgoing_at': horse.get('outgoing_at'),
+        'outgoing_to': horse.get('outgoing_to')
     }
+
+def clean_horses(horses: List[Dict]) -> Union[Horse, None]:
+    return list(map(clean_horse, horses))
