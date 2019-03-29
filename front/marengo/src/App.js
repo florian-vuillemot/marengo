@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import Horses from './lib/Horses';
 
+const TableCell = (className, value, cellLen, cb) => (
+  <td colSpan={cellLen} className={className} onClick={cb}>
+    {value}
+  </td>
+);
+
 const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, updateValue) =>
   fields.map((f, idx) => {
     const value = data[f.key] || null;
@@ -41,7 +47,7 @@ class GenericTable extends Component {
     const selectRow = id => this.setState({rowSelected: id});
     const selectColumn = id => this.setState({columnSelected: id});
     const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue);
-    
+
     return (
       <table className="Generic-table">
         <thead>
@@ -51,16 +57,29 @@ class GenericTable extends Component {
         </thead>
         <tbody>
           {_GenericValue(values, 0)}
+          {_GenericValue([{}], values.length)}
         </tbody>
         <tfoot>
-          {_GenericValue([{}], values.length)}
+          <tr>
+            {TableCell("Validate-button", "Sauvegarder", "8", this.props.saveValue)}
+          </tr>
+          <tr>
+            {TableCell("Cancel-button", "Annuler", "8", this.props.cancelValue)}
+          </tr>
         </tfoot>
       </table>
     );
   }
 }
 
-const GenericTableWrapper = ({fields, values, updateValue}) => <GenericTable fields={fields} values={values} updateValue={updateValue} />;
+const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue}) =>
+  <GenericTable
+    fields={fields}
+    values={values}
+    updateValue={updateValue}
+    saveValue={saveValue}
+    cancelValue={cancelValue}
+  />
 
 function App(){
   return (

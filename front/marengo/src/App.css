@@ -18,3 +18,11 @@
   border-collapse: collapse;
   border: 1px solid black;
 }
+
+.Cancel-button {
+  background-color: #DC143C;
+}
+
+.Validate-button {
+  background-color:	#7FFF00;
+}
