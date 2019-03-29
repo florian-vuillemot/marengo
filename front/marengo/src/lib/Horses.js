@@ -14,9 +14,9 @@ function getHorses(setHorses){
   .catch(e => console.error(e));
 }
 
-function saveHorses(horses) {
+function saveHorses(horses, updateHorses) {
   axios.post('http://localhost:5000/horses/update', horses).then(data => {
-    console.log(data);
+    updateHorses();
   });
 }
 
@@ -29,11 +29,14 @@ class Horses extends Component {
       horsesBackup: null
     };
 
-    getHorses((f, v) => this.setState({horsesFields: f, horsesValues: v, horsesBackup: v}));
+    getHorses(this.updateHorses);
+    this.updateHorses = this.updateHorses.bind(this);
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
     this.cancelValue = this.cancelValue.bind(this);
   }
+
+  updateHorses = (f, v) => this.setState({horsesFields: f, horsesValues: v, horsesBackup: v})
 
   updateValue(idx, field, value) {
     let horses = null;
@@ -52,8 +55,7 @@ class Horses extends Component {
   }
 
   saveValue() {
-    saveHorses(this.state.horsesValues);
-    this.setState({horsesBackup: this.state.horsesValues});
+    saveHorses(this.state.horsesValues, () => getHorses(this.updateHorses));
   }
 
   cancelValue() {
