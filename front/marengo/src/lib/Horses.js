@@ -34,6 +34,7 @@ class Horses extends Component {
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
     this.cancelValue = this.cancelValue.bind(this);
+    this.removeValue = this.removeValue.bind(this);
   }
 
   updateHorses = (f, v) => this.setState({horsesFields: f, horsesValues: v, horsesBackup: v})
@@ -62,6 +63,14 @@ class Horses extends Component {
     this.setState({horsesValues: this.state.horsesBackup});
   }
 
+  removeValue(id) {
+    const horses = [...this.state.horsesValues];
+    console.log(id)
+    horses.splice(id, 1);
+    console.log(horses);
+    this.setState({horsesValues: horses});
+  }
+
   render() {
     return (
         <main>
@@ -70,7 +79,8 @@ class Horses extends Component {
                 values: this.state.horsesValues,
                 updateValue: this.updateValue,
                 saveValue: this.saveValue,
-                cancelValue: this.cancelValue
+                cancelValue: this.cancelValue,
+                removeValue: this.removeValue
             })}
         </main>
     );
