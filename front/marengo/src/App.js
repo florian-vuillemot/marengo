@@ -60,6 +60,7 @@ class GenericTable extends Component {
     const removeValue = this.props.removeValue;
     const rowSelected = this.state.rowSelected;
     const columnSelected = this.state.columnSelected;
+    const nbColumn = fields.length + 1;
 
     const selectRow = id => this.setState({rowSelected: id});
     const selectColumn = id => this.setState({columnSelected: id});
@@ -78,10 +79,10 @@ class GenericTable extends Component {
         </tbody>
         <tfoot>
           <tr>
-            {TableCell("Validate-button", "Sauvegarder", "8", this.saveValue)}
+            {TableCell("Validate-button", "Sauvegarder", nbColumn, this.saveValue)}
           </tr>
           <tr>
-            {TableCell("Cancel-button", "Annuler", "8", this.cancelValue)}
+            {TableCell("Cancel-button", "Annuler", nbColumn, this.cancelValue)}
           </tr>
         </tfoot>
       </table>
