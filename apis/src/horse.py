@@ -11,12 +11,6 @@ def horses() -> Dict[str, List[Union[Dict, Horse]]]:
     with open(HORSES_FILE) as f:
         return json.loads(f.read())
 
-def add_horse(horse: Horse) -> Dict[str, List[Union[Dict, Horse]]]:
-    hs = horses()
-    hs['data'].append(horse)
-    write_in_horses_file(hs)
-    return hs
-
 def update_horses(new_horses: List[Horse]) -> Dict[str, List[Union[Dict, Horse]]]:
     hs = horses()
     hs['data'] = new_horses

@@ -8,16 +8,11 @@ import src.horse as Horse
 
 @app.route('/')
 def root():
-    return 'Hello world'
+    return 'Marengo'
 
 @app.route('/horses', methods=['GET'])
 def horses():
     return jsonify(Horse.horses())
-
-@app.route('/horse', methods=['POST'])
-def horse():
-    horse = Horse.clean_horse(request.get_json())
-    return jsonify(Horse.add_horse(horse))
 
 @app.route('/horses/update', methods=['POST'])
 def update_horses():
