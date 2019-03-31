@@ -39,6 +39,7 @@ class GenericTable extends Component {
       rowSelected: null,
       columnSelected: null,
     };
+    
     this.saveValue = this.saveValue.bind(this);
     this.cancelValue = this.cancelValue.bind(this);
   }

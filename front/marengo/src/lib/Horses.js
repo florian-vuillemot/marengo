@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 const axios = require('axios');
 
 function getHorses(setHorses){
-  axios.get('http://localhost:5000/horses').then(data => {
+  axios.get('http://localhost:5000/horses')
+  .then(data => {
     const horsesData = data.data;
 
     if (horsesData) {
@@ -50,9 +51,7 @@ class Horses extends Component {
     else {
       horses = [...this.state.horsesValues, {[field.key]: value}];
     }
-    this.setState({
-      horsesValues: horses
-    });
+    this.setState({horsesValues: horses});
   }
 
   saveValue() {
@@ -65,9 +64,7 @@ class Horses extends Component {
 
   removeValue(id) {
     const horses = [...this.state.horsesValues];
-    console.log(id)
     horses.splice(id, 1);
-    console.log(horses);
     this.setState({horsesValues: horses});
   }
 
