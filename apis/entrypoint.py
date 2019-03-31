@@ -21,8 +21,6 @@ def horse():
 
 @app.route('/horses/update', methods=['POST'])
 def update_horses():
-    print(request)
-    print(request.get_json())
     horses = Horse.clean_horses(request.get_json())
     return jsonify(Horse.update_horses(horses))
 
