@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import GenericTable from './lib/GenericTable';
 import './App.css';
 import Horse from './lib/Horse';
+import Movement from './lib/Movement';
 import horsesPicture from './images/horses.jpg';
 import horseTransport from './images/transport.jpg';
 
@@ -31,6 +32,7 @@ class App extends Component {
   showRender = () => this.setState({view: null});
 
   horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender}/>;
+  movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender}/>;
 
   selectRender() {
     return (
@@ -38,7 +40,7 @@ class App extends Component {
         <li onClick={() => this.setState({view: this.horseView})}>
           <img className="Select-image" src={horsesPicture} alt="Accèder au chevaux" />
         </li>
-        <li>
+        <li onClick={() => this.setState({view: this.movementView})}>
           <img className="Select-image" src={horseTransport} alt="Accèder au mouvement des chevaux" />
         </li>
       </ul>
