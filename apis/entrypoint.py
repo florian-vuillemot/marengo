@@ -10,10 +10,14 @@ def get_horse():
 def get_movement():
     from src.movement import Movement
     return Movement()
+def get_healthcare():
+    from src.heathcare import Healthcare
+    return Healthcare()
 
 routes = {
     'horses': get_horse,
-    'movements': get_movement
+    'movements': get_movement,
+    'healthcares': get_healthcare,
 }
 
 
