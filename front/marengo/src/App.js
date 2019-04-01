@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import GenericTable from './lib/GenericTable';
 import './App.css';
-import Horses from './lib/Horses';
+import Horse from './lib/Horse';
 import horsesPicture from './images/horses.jpg';
 import horseTransport from './images/transport.jpg';
 
@@ -24,18 +24,18 @@ class App extends Component {
       view: null
     };
 
-    this.horsesView = this.horsesView.bind(this);
+    this.horseView = this.horseView.bind(this);
     this.selectRender = this.selectRender.bind(this);
   }
 
   showRender = () => this.setState({view: null});
 
-  horsesView = () => <Horses table={GenericTableWrapper} cb={this.showRender}/>;
+  horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender}/>;
 
   selectRender() {
     return (
       <ul className="App-select">
-        <li onClick={() => this.setState({view: this.horsesView})}>
+        <li onClick={() => this.setState({view: this.horseView})}>
           <img className="Select-image" src={horsesPicture} alt="Accèder au chevaux" />
         </li>
         <li>
