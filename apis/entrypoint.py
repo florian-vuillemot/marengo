@@ -4,20 +4,35 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-import src.horse as Horse
+def get_horse():
+    from src.horse import Horse
+    return Horse()
+def get_movement():
+    from src.movement import Movement
+    return Movement()
+
+routes = {
+    'horses': get_horse,
+    'movements': get_movement
+}
+
 
 @app.route('/')
 def root():
     return 'Marengo'
 
-@app.route('/horses', methods=['GET'])
-def horses():
-    return jsonify(Horse.horses())
 
-@app.route('/horses/update', methods=['POST'])
-def update_horses():
-    horses = Horse.clean_horses(request.get_json())
-    return jsonify(Horse.update_horses(horses))
+@app.route('/<obj>', methods=['GET'])
+def get_all(obj):
+    return jsonify(routes[obj]().get_all())
+
+
+@app.route('/<obj>/update', methods=['POST'])
+def update_all(obj):
+    g_obj = routes[obj]()
+    data = list(g_obj.cleans(request.get_json()))
+    return jsonify(g_obj.update_all(data))
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

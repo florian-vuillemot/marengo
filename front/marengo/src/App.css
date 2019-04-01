@@ -13,6 +13,20 @@
   color: black; /*white;*/
 }
 
+.App-select {
+  list-style-type: none;
+}
+
+.App-select > li {
+  display: inline;
+}
+
+.App-select > li > img {
+  max-width: 50%;
+  max-height: 40%;
+  margin: 1%;
+}
+
 .Generic-table, th, td { /* Improve th, td selection */
   padding: 20px;
   border-collapse: collapse;
