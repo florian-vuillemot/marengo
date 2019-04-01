@@ -4,32 +4,35 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from src.horse import Horse
-from src.movement import Movement
+def get_horse():
+    from src.horse import Horse
+    return Horse()
+def get_movement():
+    from src.movement import Movement
+    return Movement()
+
+routes = {
+    'horses': get_horse,
+    'movements': get_movement
+}
+
 
 @app.route('/')
 def root():
     return 'Marengo'
 
-@app.route('/horses', methods=['GET'])
-def horses():
-    return jsonify(Horse().get_all())
 
-@app.route('/horses/update', methods=['POST'])
-def update_horses():
-    h = Horse()
-    horses = h.cleans(request.get_json())
-    return jsonify(h.update_all(list(horses)))
+@app.route('/<obj>', methods=['GET'])
+def get_all(obj):
+    return jsonify(routes[obj]().get_all())
 
-@app.route('/movements', methods=['GET'])
-def movements():
-    return jsonify(Movement().get_all())
 
-@app.route('/movements/update', methods=['POST'])
-def update_movements():
-    mvt = Movement()
-    movements = mvt.cleans(request.get_json())
-    return jsonify(mvt.update_all(list(movements)))
+@app.route('/<obj>/update', methods=['POST'])
+def update_all(obj):
+    g_obj = routes[obj]()
+    data = list(g_obj.cleans(request.get_json()))
+    return jsonify(g_obj.update_all(data))
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
