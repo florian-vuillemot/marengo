@@ -56,10 +56,12 @@ class Horses extends Component {
 
   saveValue() {
     saveHorses(this.state.horsesValues, () => getHorses(this.updateHorses));
+    this.props.cb();
   }
 
   cancelValue() {
     this.setState({horsesValues: this.state.horsesBackup});
+    this.props.cb();
   }
 
   removeValue(id) {
