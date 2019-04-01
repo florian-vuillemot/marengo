@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 const axios = require('axios');
 
-function getData(setData){
-  axios.get('http://localhost:5000/horses')
+const URL = 'http://localhost:5000/'
+
+function getData(setData, route){
+  axios.get(URL + route)
   .then(data => {
     const _data = data.data;
 
@@ -15,20 +17,22 @@ function getData(setData){
   .catch(e => console.error(e));
 }
 
-function saveData(data) {
-  axios.post('http://localhost:5000/horses/update', data);
+function saveData(data, route) {
+  axios.post(URL + `${route}/update`, data);
 }
 
 class GenericData extends Component {
-  constructor(props){
+  constructor(route, props){
     super(props);
+    
+    this.route = route;
     this.state = {
       dataFields: null,
       dataValues: null,
       dataBackup: null
     };
 
-    getData(this.updateData);
+    getData(this.updateData, this.route);
     this.updateData = this.updateData.bind(this);
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
@@ -53,7 +57,7 @@ class GenericData extends Component {
   }
 
   saveValue() {
-    saveData(this.state.dataValues);
+    saveData(this.state.dataValues, this.route);
     this.props.cb();
   }
 
