@@ -1,33 +1,54 @@
-import json
-from typing import List, Dict, Union
+from configs import DATA_DIRECTORY
+from .generic_data import GenericData
 
-from .horse_helper import ensure_file_exist, write_in_horses_file, HORSES_FILE
+HORSES_FILE = DATA_DIRECTORY + '/horses.json'
 
-# Dict clean and ready for use as Horse
-Horse = Dict
+class Horse(GenericData):
+        @property
+        def filename(self):
+                return HORSES_FILE
 
-@ensure_file_exist
-def horses() -> Dict[str, List[Union[Dict, Horse]]]:
-    with open(HORSES_FILE) as f:
-        return json.loads(f.read())
-
-def update_horses(new_horses: List[Horse]) -> Dict[str, List[Union[Dict, Horse]]]:
-    hs = horses()
-    hs['data'] = new_horses
-    write_in_horses_file(hs)
-    return hs
-
-def clean_horse(horse: Dict) -> Union[Horse, None]:
-    return {
-        'name': horse.get('name'),
-        'sire': horse.get('sire'),
-        'transponder': horse.get('transponder'),
-        'owner': horse.get('owner'),
-        'incoming_at': horse.get('incoming_at'),
-        'incoming_from': horse.get('incoming_from'),
-        'outgoing_at': horse.get('outgoing_at'),
-        'outgoing_to': horse.get('outgoing_to')
-    }
-
-def clean_horses(horses: List[Dict]) -> Union[Horse, None]:
-    return list(map(clean_horse, horses))
+        @property
+        def format(self):
+                return [{
+                        'key': 'name',
+                        'name': 'Nom',
+                        'description': 'Le nom du cheval',
+                        'type': 'text'
+                        },{
+                        'key': 'sire',
+                        'name': 'N° SIRE',
+                        'description': 'Le numéro de SIRE du cheval',
+                        'type': 'text'
+                        },{
+                        'key': 'transponder',
+                        'name': 'N° Transpondeur',
+                        'description': 'Le numéro de transpondeur du cheval',
+                        'type': 'text'
+                        },{
+                        'key': 'owner',
+                        'name': 'Propriétaire',
+                        'description': 'Nom et coordonnées du propriétaire',
+                        'type': 'text'
+                        },{
+                        'key': 'incoming_at',
+                        'name': 'Entrée',
+                        'description': 'Date de première entré dans le centre',
+                        'type': 'date'
+                        },{
+                        'key': 'incoming_from',
+                        'name': 'Provenance',
+                        'description': "Adresse de provenance de l'animal",
+                        'type': 'text'
+                        },{
+                        'key': 'outgoing_at',
+                        'name': 'Sortie',
+                        'description': 'Date de sortie définitive du centre',
+                        'type': 'date'
+                        },{
+                        'key': 'outgoing_to',
+                        'name': 'Destination',
+                        'description': "Adresse de destination de l'animal lors de la sortie définitive du centre",
+                        'type': 'text'
+                        }
+                ]

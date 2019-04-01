@@ -4,7 +4,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-import src.horse as Horse
+from src.horse import Horse
 from src.movement import Movement
 
 @app.route('/')
@@ -13,12 +13,13 @@ def root():
 
 @app.route('/horses', methods=['GET'])
 def horses():
-    return jsonify(Horse.horses())
+    return jsonify(Horse().get_all())
 
 @app.route('/horses/update', methods=['POST'])
 def update_horses():
-    horses = Horse.clean_horses(request.get_json())
-    return jsonify(Horse.update_horses(horses))
+    h = Horse()
+    horses = h.cleans(request.get_json())
+    return jsonify(h.update_all(list(horses)))
 
 @app.route('/movements', methods=['GET'])
 def movements():
