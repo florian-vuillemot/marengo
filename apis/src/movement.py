@@ -34,7 +34,7 @@ class Movement(GenericData):
                         'key': 'destination',
                         'name': 'Destination',
                         'description': 'Lieu de la destination (adresse)',
-                        'type': 'date'
+                        'type': 'text'
                         },{
                         'key': 'come_back_at',
                         'name': 'Retour',
