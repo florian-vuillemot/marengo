@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
 
+const GenericInput = (data, field, rowIdx, updateValue) => {
+  const value = data[field.key] || "";
+  const _onChange = e => updateValue(rowIdx, field, e.target.value);
+  if (field.type === 'select') {
+    return (
+      <select onChange={e => _onChange(e)} value={value}>
+        {field.values.map(d => <option defaultValue={d} key={d}>{d}</option>)}
+      </select>
+    );
+  }
+  return <input type={field.type} defaultValue={value} onChange={e => _onChange(e)} autoFocus/>;
+}
+
 const TableCell = (className, value, cellLen, cb) => (
     <td colSpan={cellLen} className={className} onClick={cb}>
       {value}
@@ -11,8 +24,7 @@ const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, update
     const view = fields.map((f, idx) => {
       const value = data[f.key] || null;
       const cb = (_idx) => selectColumn(_idx);
-      const _onChange = e => updateValue(rowIdx, f, e.target.value);
-      const _input = () => <input type={f.type} defaultValue={value} onChange={e => _onChange(e)} autoFocus/>;
+      const _input = () => GenericInput(data, f, rowIdx, updateValue);
       return _td(idx, idx, cb, columnSelected === idx ? _input() : value);
     });
     const removeRow = _td(view.length, rowIdx, removeValue, <i className='fas fa-trash-alt'></i>);
@@ -64,7 +76,6 @@ class GenericTable extends Component {
       const selectRow = id => this.setState({rowSelected: id});
       const selectColumn = id => this.setState({columnSelected: id});
       const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, removeValue);
-  
       return (
         <table className="Generic-table">
           <thead>
