@@ -11,13 +11,14 @@ import healthcarePicture from './images/healthcare.jpg';
 import ownerInformationPicture from './images/owner_information.jpeg';
 
 
-const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue, removeValue}) =>
+const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue, addImages, removeValue}) =>
   <GenericTable
     fields={fields}
     values={values}
     updateValue={updateValue}
     saveValue={saveValue}
     cancelValue={cancelValue}
+    addImages={addImages}
     removeValue={removeValue}
   />
 

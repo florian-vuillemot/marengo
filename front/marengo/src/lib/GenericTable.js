@@ -19,7 +19,7 @@ const TableCell = (className, value, cellLen, cb) => (
     </td>
 );
   
-const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, updateValue, removeValue) => {
+const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, updateValue, addImages, removeValue) => {
     const _td = (_key, _idx, cb, rd) => <td key={_key} onClick={() => cb(_idx)}>{rd}</td>;
     const view = fields.map((f, idx) => {
       const value = data[f.key] || null;
@@ -27,16 +27,17 @@ const GenericValue = (fields, data, selectColumn, columnSelected, rowIdx, update
       const _input = () => GenericInput(data, f, rowIdx, updateValue);
       return _td(idx, idx, cb, columnSelected === idx ? _input() : value);
     });
-    const removeRow = _td(view.length, rowIdx, removeValue, <i className='fas fa-trash-alt'></i>);
-    return [...view, removeRow];
+    const imagesIcon = _td(view.length, rowIdx, addImages, <i className='fas fa-images'></i>);
+    const removeRow = _td(view.length + 1, rowIdx, removeValue, <i className='fas fa-trash-alt'></i>);
+    return [...view, imagesIcon, removeRow];
 }
   
-const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, removeValue) =>
+const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, addImages, removeValue) =>
     values.map((value, idx) => {
       const _idx = idxStart + idx;
       const _tr = _td => <tr key={_idx} onClick={() => selectRow(_idx)} >{_td}</tr>;
       const _columnSelected = _idx === rowSelected ? columnSelected : null;
-      return _tr(GenericValue(fields, value, selectColumn, _columnSelected, _idx, updateValue, removeValue));
+      return _tr(GenericValue(fields, value, selectColumn, _columnSelected, _idx, updateValue, addImages, removeValue));
 });
   
 const getViewFields = (fields) => (fields && fields.map(field => <th key={field.name}>{field.name}</th>));
@@ -68,6 +69,7 @@ class GenericTable extends Component {
       const fields = this.props.fields || [];
       const values = this.props.values || [];
       const updateValue = this.props.updateValue;
+      const addImages = this.props.addImages;
       const removeValue = this.props.removeValue;
       const rowSelected = this.state.rowSelected;
       const columnSelected = this.state.columnSelected;
@@ -75,7 +77,7 @@ class GenericTable extends Component {
   
       const selectRow = id => this.setState({rowSelected: id});
       const selectColumn = id => this.setState({columnSelected: id});
-      const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, removeValue);
+      const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, addImages, removeValue);
       return (
         <table className="Generic-table">
           <thead>
@@ -85,7 +87,7 @@ class GenericTable extends Component {
           </thead>
           <tbody>
             {_GenericValue(values, 0)}
-            {_GenericValue([{}], values.length)}
+            {_GenericValue([{}, {}], values.length)}
           </tbody>
           <tfoot>
             <tr>

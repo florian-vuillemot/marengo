@@ -37,6 +37,7 @@ class GenericData extends Component {
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
     this.cancelValue = this.cancelValue.bind(this);
+    this.addImages = this.addImages.bind(this);
     this.removeValue = this.removeValue.bind(this);
   }
 
@@ -66,6 +67,10 @@ class GenericData extends Component {
     this.props.cb();
   }
 
+  addImages() {
+    console.log('Add images');
+  }
+
   removeValue(id) {
     const data = [...this.state.dataValues];
     data.splice(id, 1);
@@ -81,6 +86,7 @@ class GenericData extends Component {
                 updateValue: this.updateValue,
                 saveValue: this.saveValue,
                 cancelValue: this.cancelValue,
+                addImages: this.addImages,
                 removeValue: this.removeValue
             })}
         </main>
