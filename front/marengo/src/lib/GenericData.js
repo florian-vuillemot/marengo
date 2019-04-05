@@ -22,6 +22,11 @@ function saveData(data, route) {
   axios.post(URL + `${route}/update`, data);
 }
 
+function getImgName() {
+  const time = new Date().getTime();
+  return [time, time + 1, time + 2, time + 3];
+}
+
 class GenericData extends Component {
   constructor(route, props){
     super(props);
@@ -53,7 +58,8 @@ class GenericData extends Component {
       data = dataValues.map((h, _idx) => _idx === idx ? dataUpdate : h);
     }
     else {
-      data = [...this.state.dataValues, {[field.key]: value}];
+      const imagesNames = getImgName();
+      data = [...this.state.dataValues, {[field.key]: value, images: imagesNames}];
     }
     this.setState({dataValues: data});
   }
@@ -68,10 +74,10 @@ class GenericData extends Component {
     this.props.cb();
   }
 
-  addImages() {
-    const images = this.state.dataValues.images || [];
+  addImages(idx) {
+    const images = this.state.dataValues[idx].images || [];
     this.props.loadModule(() =>
-      <Images images={images} cb={() => this.props.cb()}/>);
+      <Images images={images} cb={() => this.saveValue()}/>);
   }
 
   removeValue(id) {

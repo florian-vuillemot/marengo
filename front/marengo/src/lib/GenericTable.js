@@ -67,27 +67,28 @@ class GenericTable extends Component {
   
     render() {
       const fields = this.props.fields || [];
+      const fieldsToPrint = fields.filter(f => f.hidden !== true);
       const values = this.props.values || [];
       const updateValue = this.props.updateValue;
       const addImages = this.props.addImages;
       const removeValue = this.props.removeValue;
       const rowSelected = this.state.rowSelected;
       const columnSelected = this.state.columnSelected;
-      const nbColumn = fields.length + 1;
+      const nbColumn = fieldsToPrint.length + 2;
   
       const selectRow = id => this.setState({rowSelected: id});
       const selectColumn = id => this.setState({columnSelected: id});
-      const _GenericValue = (_values, idxStart) => GenericValues(fields, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, addImages, removeValue);
+      const _GenericValue = (_values, idxStart) => GenericValues(fieldsToPrint, _values, selectRow, selectColumn, rowSelected, columnSelected, idxStart, updateValue, addImages, removeValue);
       return (
         <table className="Generic-table">
           <thead>
             <tr>
-              {getViewFields(fields)}
+              {getViewFields(fieldsToPrint)}
             </tr>
           </thead>
           <tbody>
             {_GenericValue(values, 0)}
-            {_GenericValue([{}, {}], values.length)}
+            {_GenericValue([{}], values.length)}
           </tbody>
           <tfoot>
             <tr>

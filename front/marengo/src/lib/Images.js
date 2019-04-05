@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { TableCell } from './GenericTable'
-import selectImage from '../images/selectimage.jpg';
 const axios = require('axios');
 
 const URL = 'http://localhost:5000/'
@@ -11,26 +10,24 @@ class Images extends Component {
       super(props);
   
       this.state = {
-        img1: this.props.images[0] || selectImage,
-        img2: this.props.images[1] || selectImage,
-        img3: this.props.images[2] || selectImage,
-        img4: this.props.images[3] || selectImage
+        img1: this.props.images[0],
+        img2: this.props.images[1],
+        img3: this.props.images[2],
+        img4: this.props.images[3]
       };
     }
 
-    showImage(img) {
-      const src = img !== selectImage ? `${IMAGE_URL}/${img}` : selectImage;
-      return <img src={src} className="Select-image" alt="" />;
-    };
+    showImage = (img) => <img src={`${IMAGE_URL}/${img}`} className="Select-image" alt="" />;
     newImage = img => <input type="file" accept="image/*,.pdf" onChange={(e) => this.updateImg(img, e.target.files[0])} />;
 
     updateImg(img, file) {
+      const imgName = this.state[img];
       const headers = {headers: {'Content-Type': 'multipart/form-data'}};
-      const data = new FormData()
-      data.append('file', file);
+      const data = new FormData();
 
-      return axios.post(IMAGE_URL, data, headers)
-        .then((response) => this.setState({[img]: file.name}))
+      data.append('file', file);
+      return axios.post(`${IMAGE_URL}/${imgName}`, data, headers)
+        .then(() => this.setState({[img]: `${imgName}?nocache=${Math.random()}`}))
         .catch((error) => {      
           console.log('error',error);
         });
