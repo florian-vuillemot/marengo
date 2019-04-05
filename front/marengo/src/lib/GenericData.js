@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Images from './Images';
 const axios = require('axios');
 
 const URL = 'http://localhost:5000/'
@@ -68,7 +69,9 @@ class GenericData extends Component {
   }
 
   addImages() {
-    console.log('Add images');
+    const images = this.state.dataValues.images || [];
+    this.props.loadModule(() =>
+      <Images images={images} cb={() => this.props.cb()}/>);
   }
 
   removeValue(id) {

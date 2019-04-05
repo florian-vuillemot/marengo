@@ -102,4 +102,4 @@ class GenericTable extends Component {
     }
 }
 
-export default GenericTable;
+export {GenericTable, TableCell};
