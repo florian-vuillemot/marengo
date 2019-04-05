@@ -47,14 +47,14 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/image', methods=['POST'])
-def add_image():
+@app.route('/image/<filename>', methods=['POST'])
+def add_image(filename):
     import os
     from werkzeug.utils import secure_filename
-    
+
     file = request.files['file']
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
+        filename = secure_filename(filename)
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return jsonify({}), 200
     return jsonify({}), 200
