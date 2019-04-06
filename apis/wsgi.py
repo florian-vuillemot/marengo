@@ -1,4 +1,4 @@
-from entrypoint import app
+from entrypoint import app as application
 
 if __name__ == "__main__":
-    app.run()
+    application.run()
