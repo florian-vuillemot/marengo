@@ -54,7 +54,8 @@ class GenericData extends Component {
     const dataValues = this.state.dataValues;
     
     if (idx < dataValues.length){
-      const dataUpdate = {...dataValues[idx], [field.key]: value};
+      const imagesName = dataValues[idx].images ? dataValues[idx].images : getImgName();
+      const dataUpdate = {...dataValues[idx], [field.key]: value, images: imagesName};
       data = dataValues.map((h, _idx) => _idx === idx ? dataUpdate : h);
     }
     else {
@@ -75,7 +76,7 @@ class GenericData extends Component {
   }
 
   addImages(idx) {
-    const images = this.state.dataValues[idx].images || [];
+    const images = this.state.dataValues[idx].images;
     this.props.loadModule(() =>
       <Images images={images} cb={() => this.saveValue()}/>);
   }
