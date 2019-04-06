@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect, send_from_directory
+from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -41,27 +41,27 @@ def update_all(obj):
     data = list(g_obj.cleans(request.get_json()))
     return jsonify(g_obj.update_all(data))
 
-UPLOAD_FOLDER = '/marengo/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/image/<filename>', methods=['POST'])
 def add_image(filename):
     import os
     from werkzeug.utils import secure_filename
+    from configs import ALLOWED_EXTENSIONS, IMAGE_DIRECTORY
 
+    def allowed_file(f):
+        return '.' in f and f.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     file = request.files['file']
     if file and allowed_file(file.filename):
         filename = secure_filename(filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
-        return jsonify({}), 200
+        file.save(os.path.join(IMAGE_DIRECTORY, filename))
     return jsonify({}), 200
+
 
 @app.route('/image/<filename>', methods=['GET'])
 def get_image(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    from flask import send_from_directory
+    from configs import IMAGE_DIRECTORY
+    return send_from_directory(IMAGE_DIRECTORY, filename)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
