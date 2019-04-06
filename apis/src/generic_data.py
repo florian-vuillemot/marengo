@@ -1,5 +1,8 @@
 import json, os
 
+DATA = 'data'
+FIELDS = 'fields'
+
 class GenericData:
     @property
     def filename(self):
@@ -15,11 +18,14 @@ class GenericData:
 
     def get_all(self):
         _ensure_file_exist(self.filename, self.format)
-        return read_json_file(self.filename)
+        data = read_json_file(self.filename)
+        data[FIELDS] = self.format
+        return data
 
     def update_all(self, elements):
         els = self.get_all()
-        els['data'] = elements
+        els[DATA] = elements
+        els[FIELDS] = self.format
         save_json_in_file(self.filename, els)
         return els
 
@@ -45,6 +51,6 @@ def _clean(keys, elements):
 def _ensure_file_exist(filename, fields_format):
     if not os.path.isfile(filename):
         save_json_in_file(filename, {
-            'fields': fields_format,
-            'data': []
+            FIELDS: fields_format,
+            DATA: []
         })
