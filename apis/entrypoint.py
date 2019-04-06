@@ -11,7 +11,7 @@ def get_movement():
     from src.movement import Movement
     return Movement()
 def get_healthcare():
-    from src.heathcare import Healthcare
+    from src.healthcare import Healthcare
     return Healthcare()
 def get_owner_information():
     from src.owner_information import OwnerInformation
