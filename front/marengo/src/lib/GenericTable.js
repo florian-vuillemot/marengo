@@ -40,7 +40,7 @@ const GenericValues = (fields, values, selectRow, selectColumn, rowSelected, col
       return _tr(GenericValue(fields, value, selectColumn, _columnSelected, _idx, updateValue, addImages, removeValue));
 });
   
-const getViewFields = (fields) => (fields && fields.map(field => <th key={field.name}>{field.name}</th>));
+const getViewFields = (fields) => (fields && fields.map(field => <th key={field.name} title={field.description}>{field.name}</th>));
   
 class GenericTable extends Component {
     constructor(props) {
