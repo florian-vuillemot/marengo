@@ -65,5 +65,8 @@ class Healthcare(GenericData):
                         'name': 'Attente abattage',
                         'description': 'Délai attente avant abattage ou exclusion abattage',
                         'type': 'text'
+                        },{
+                        'key': 'images',
+                        'hidden': True
                         }
                 ]

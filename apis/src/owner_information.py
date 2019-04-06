@@ -51,4 +51,7 @@ class OwnerInformation(GenericData):
                 'name': 'Mail',
                 'description': 'Mail du détenteur',
                 'type': 'email'
+            },{
+                'key': 'images',
+                'hidden': True
             }]
