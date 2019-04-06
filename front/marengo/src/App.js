@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import GenericTable from './lib/GenericTable';
+import React, { Component } from 'react';
+import { GenericTable } from './lib/GenericTable';
 import './App.css';
 import Horse from './lib/Horse';
 import Movement from './lib/Movement';
@@ -11,13 +11,14 @@ import healthcarePicture from './images/healthcare.jpg';
 import ownerInformationPicture from './images/owner_information.jpeg';
 
 
-const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue, removeValue}) =>
+const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue, addImages, removeValue}) =>
   <GenericTable
     fields={fields}
     values={values}
     updateValue={updateValue}
     saveValue={saveValue}
     cancelValue={cancelValue}
+    addImages={addImages}
     removeValue={removeValue}
   />
 
@@ -34,11 +35,12 @@ class App extends Component {
   }
 
   showRender = () => this.setState({view: null});
+  loadModule = module => this.setState({view: module});
 
-  horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender}/>;
-  movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender}/>;
-  healthcareView = () => <Healthcare table={GenericTableWrapper} cb={this.showRender}/>;
-  ownerInformationView = () => <OwnerInformation table={GenericTableWrapper} cb={this.showRender}/>;
+  horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
+  movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
+  healthcareView = () => <Healthcare table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
+  ownerInformationView = () => <OwnerInformation table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
 
   selectRender() {
     return (

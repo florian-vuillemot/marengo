@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Images from './Images';
 const axios = require('axios');
 
 const URL = 'http://localhost:5000/'
@@ -21,6 +22,11 @@ function saveData(data, route) {
   axios.post(URL + `${route}/update`, data);
 }
 
+function getImgName() {
+  const time = new Date().getTime();
+  return [time, time + 1, time + 2, time + 3];
+}
+
 class GenericData extends Component {
   constructor(route, props){
     super(props);
@@ -37,6 +43,7 @@ class GenericData extends Component {
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
     this.cancelValue = this.cancelValue.bind(this);
+    this.addImages = this.addImages.bind(this);
     this.removeValue = this.removeValue.bind(this);
   }
 
@@ -47,11 +54,13 @@ class GenericData extends Component {
     const dataValues = this.state.dataValues;
     
     if (idx < dataValues.length){
-      const dataUpdate = {...dataValues[idx], [field.key]: value};
+      const imagesName = dataValues[idx].images ? dataValues[idx].images : getImgName();
+      const dataUpdate = {...dataValues[idx], [field.key]: value, images: imagesName};
       data = dataValues.map((h, _idx) => _idx === idx ? dataUpdate : h);
     }
     else {
-      data = [...this.state.dataValues, {[field.key]: value}];
+      const imagesNames = getImgName();
+      data = [...this.state.dataValues, {[field.key]: value, images: imagesNames}];
     }
     this.setState({dataValues: data});
   }
@@ -64,6 +73,12 @@ class GenericData extends Component {
   cancelValue() {
     this.setState({dataValues: this.state.dataBackup});
     this.props.cb();
+  }
+
+  addImages(idx) {
+    const images = this.state.dataValues[idx].images;
+    this.props.loadModule(() =>
+      <Images images={images} cb={() => this.saveValue()}/>);
   }
 
   removeValue(id) {
@@ -81,6 +96,7 @@ class GenericData extends Component {
                 updateValue: this.updateValue,
                 saveValue: this.saveValue,
                 cancelValue: this.cancelValue,
+                addImages: this.addImages,
                 removeValue: this.removeValue
             })}
         </main>

@@ -50,5 +50,8 @@ class Horse(GenericData):
                         'name': 'Destination',
                         'description': "Adresse de destination de l'animal lors de la sortie définitive du centre",
                         'type': 'text'
+                        },{
+                        'key': 'images',
+                        'hidden': True
                         }
                 ]

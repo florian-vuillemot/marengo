@@ -21,7 +21,7 @@
   display: inline;
 }
 
-.App-select > li > img {
+.App-select > li > img, .Select-image {
   width: 40%;
   height: 40%;
   margin: 1%;

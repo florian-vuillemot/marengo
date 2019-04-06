@@ -40,5 +40,8 @@ class Movement(GenericData):
                         'name': 'Retour',
                         'description': 'Date ce retour',
                         'type': 'date'
+                        },{
+                        'key': 'images',
+                        'hidden': True
                         }
                 ]

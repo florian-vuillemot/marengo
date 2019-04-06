@@ -37,17 +37,17 @@ class Healthcare(GenericData):
                         'type': 'text'
                         },{
                         'key': 'administration',
-                        'name': "Voie d'administration",
+                        'name': "Administration",
                         'description': "Voie d'administration (facultatif si ordonnance)",
                         'type': 'text'
                         },{
                         'key': 'beginning',
-                        'name': 'Date de début',
+                        'name': 'Début',
                         'description': 'Date de début du traitement',
                         'type': 'date'
                         },{
                         'key': 'end',
-                        'name': 'Date de fin',
+                        'name': 'Fin',
                         'description': 'Date de fin du traitement',
                         'type': 'date'
                         },{
@@ -57,13 +57,16 @@ class Healthcare(GenericData):
                         'type': 'text'
                         },{
                         'key': 'competition',
-                        'name': 'Attente compétition',
+                        'name': 'Compétition',
                         'description': 'Délai attente compétition',
                         'type': 'text'
                         },{
                         'key': 'slaugther',
-                        'name': 'Attente abattage',
+                        'name': 'Abattage',
                         'description': 'Délai attente avant abattage ou exclusion abattage',
                         'type': 'text'
+                        },{
+                        'key': 'images',
+                        'hidden': True
                         }
                 ]
