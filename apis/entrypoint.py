@@ -39,17 +39,14 @@ def root():
 
 @app.route('/user/login', methods=['POST'])
 def login():
+    from src.auth import is_user
     user_data = request.get_json()
     if not user_data:
         return jsonify({}), 400
-
     username = user_data.get('username', None)
     password = user_data.get('password', None)
-    if not username or not password:
+    if not is_user(username, password):
         return jsonify({}), 400
-
-    if username != 'test' or password != 'test':
-        return jsonify({}), 401
 
     access_token = create_access_token(identity=username)
     return jsonify(access_token=access_token), 200
