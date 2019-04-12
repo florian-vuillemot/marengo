@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 const axios = require('axios');
 
+const baseURL = 'http://localhost:5000';
 const httpClient = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: baseURL,
 });
+httpClient.baseURL = baseURL;
 
 
 class Auth extends Component {
@@ -27,10 +29,10 @@ class Auth extends Component {
             username: this.state.username,
             password: this.state.password
         };
-
         httpClient.post('/user/login', data)
         .then(data => {
             const jwt = data.data.access_token;
+            httpClient.jwt = jwt;
             httpClient.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
             this.props.setHttpClient(httpClient);
         })

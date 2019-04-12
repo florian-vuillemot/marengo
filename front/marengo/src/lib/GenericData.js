@@ -77,7 +77,7 @@ class GenericData extends Component {
   addImages(idx) {
     const images = this.state.dataValues[idx].images;
     this.props.loadModule(() =>
-      <Images images={images} cb={() => this.saveValue()}/>);
+      <Images images={images} cb={() => this.saveValue()} httpClient={this.httpClient}/>);
   }
 
   removeValue(id) {
