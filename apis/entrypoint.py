@@ -8,6 +8,7 @@ from flask_jwt_extended import (
 
 app = Flask(__name__)
 CORS(app)
+app.config['JWT_TOKEN_LOCATION'] = ['headers', 'query_string']
 app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
 jwt = JWTManager(app)
 
