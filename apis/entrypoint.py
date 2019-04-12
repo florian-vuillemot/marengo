@@ -1,8 +1,15 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 
 app = Flask(__name__)
 CORS(app)
+app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
+jwt = JWTManager(app)
 
 def get_horse():
     from src.horse import Horse
@@ -29,13 +36,31 @@ routes = {
 def root():
     return 'Marengo'
 
+@app.route('/user/login', methods=['POST'])
+def login():
+    user_data = request.get_json()
+    if not user_data:
+        return jsonify({}), 400
+
+    username = user_data.get('username', None)
+    password = user_data.get('password', None)
+    if not username or not password:
+        return jsonify({}), 400
+
+    if username != 'test' or password != 'test':
+        return jsonify({}), 401
+
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token), 200
 
 @app.route('/<obj>', methods=['GET'])
+@jwt_required
 def get_all(obj):
     return jsonify(routes[obj]().get_all())
 
 
 @app.route('/<obj>/update', methods=['POST'])
+@jwt_required
 def update_all(obj):
     g_obj = routes[obj]()
     data = list(g_obj.cleans(request.get_json()))
@@ -43,6 +68,7 @@ def update_all(obj):
 
 
 @app.route('/image/<filename>', methods=['POST'])
+@jwt_required
 def add_image(filename):
     import os
     from werkzeug.utils import secure_filename
@@ -58,6 +84,7 @@ def add_image(filename):
 
 
 @app.route('/image/<filename>', methods=['GET'])
+@jwt_required
 def get_image(filename):
     from flask import send_from_directory
     from configs import IMAGE_DIRECTORY
