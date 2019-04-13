@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { GenericTable } from './lib/GenericTable';
 import './App.css';
+import { GenericTable } from './lib/GenericTable';
+import Auth from './lib/Auth';
 import Horse from './lib/Horse';
 import Movement from './lib/Movement';
 import Healthcare from './lib/Healthcare';
@@ -27,7 +28,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      view: null
+      view: null,
+      httpClient: null
     };
 
     this.horseView = this.horseView.bind(this);
@@ -37,10 +39,10 @@ class App extends Component {
   showRender = () => this.setState({view: null});
   loadModule = module => this.setState({view: module});
 
-  horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
-  movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
-  healthcareView = () => <Healthcare table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
-  ownerInformationView = () => <OwnerInformation table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule}/>;
+  horseView = () => <Horse table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
+  movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
+  healthcareView = () => <Healthcare table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
+  ownerInformationView = () => <OwnerInformation table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
 
   selectRender() {
     return (
@@ -62,10 +64,17 @@ class App extends Component {
   }
 
   render() {
+    let toRend = null;
+    if (this.state.httpClient === null) {
+      toRend = <Auth setHttpClient={httpClient => this.setState({'httpClient': httpClient})}/>
+    }
+    else {
+      toRend = !this.state.view ? this.selectRender() : this.state.view();
+    }
     return (
       <div className="App">
         <div className="App-body">
-          {!this.state.view ? this.selectRender() : this.state.view()}
+          {toRend}
         </div>
       </div>
     );

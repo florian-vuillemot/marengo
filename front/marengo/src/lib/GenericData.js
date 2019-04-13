@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import Images from './Images';
-const axios = require('axios');
 
-const URL = 'http://localhost:5000/'
-
-function getData(setData, route){
-  axios.get(URL + route)
+function getData(setData, route, httpClient){
+  httpClient.get(route)
   .then(data => {
     const _data = data.data;
 
@@ -18,8 +15,8 @@ function getData(setData, route){
   .catch(e => console.error(e));
 }
 
-function saveData(data, route) {
-  axios.post(URL + `${route}/update`, data);
+function saveData(data, route, httpClient) {
+  httpClient.post(`${route}/update`, data);
 }
 
 function getImgName() {
@@ -30,15 +27,17 @@ function getImgName() {
 class GenericData extends Component {
   constructor(route, props){
     super(props);
-    
+
+    this.httpClient = props.httpClient;
     this.route = route;
+
     this.state = {
       dataFields: null,
       dataValues: null,
       dataBackup: null
     };
 
-    getData(this.updateData, this.route);
+    getData(this.updateData, this.route, this.httpClient);
     this.updateData = this.updateData.bind(this);
     this.updateValue = this.updateValue.bind(this);
     this.saveValue = this.saveValue.bind(this);
@@ -66,7 +65,7 @@ class GenericData extends Component {
   }
 
   saveValue() {
-    saveData(this.state.dataValues, this.route);
+    saveData(this.state.dataValues, this.route, this.httpClient);
     this.props.cb();
   }
 
@@ -78,7 +77,7 @@ class GenericData extends Component {
   addImages(idx) {
     const images = this.state.dataValues[idx].images;
     this.props.loadModule(() =>
-      <Images images={images} cb={() => this.saveValue()}/>);
+      <Images images={images} cb={() => this.saveValue()} httpClient={this.httpClient}/>);
   }
 
   removeValue(id) {
