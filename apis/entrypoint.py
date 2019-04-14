@@ -24,12 +24,16 @@ def get_healthcare():
 def get_owner_information():
     from src.owner_information import OwnerInformation
     return OwnerInformation()
+def get_health_stable_information():
+    from src.health_stable_information import HealthStableInformation
+    return HealthStableInformation()
 
 routes = {
     'horses': get_horse,
     'movements': get_movement,
     'healthcares': get_healthcare,
     'owner_information': get_owner_information,
+    'health_stable_information': get_health_stable_information
 }
 
 
