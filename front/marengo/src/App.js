@@ -5,11 +5,13 @@ import Auth from './lib/Auth';
 import Horse from './lib/Horse';
 import Movement from './lib/Movement';
 import Healthcare from './lib/Healthcare';
+import HealthStableInformation from './lib/HealthStableInformation';
 import OwnerInformation from './lib/OwnerInformation';
 import horsesPicture from './images/horses.jpg';
 import horseTransportPicture from './images/transport.jpg';
 import healthcarePicture from './images/healthcare.jpg';
 import ownerInformationPicture from './images/owner_information.jpeg';
+import healthStableInformationPicture from './images/health_stable_information.jpg';
 
 
 const GenericTableWrapper = ({fields, values, updateValue, saveValue, cancelValue, addImages, removeValue}) =>
@@ -43,6 +45,7 @@ class App extends Component {
   movementView = () => <Movement table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
   healthcareView = () => <Healthcare table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
   ownerInformationView = () => <OwnerInformation table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
+  healthStableInformation = () => <HealthStableInformation table={GenericTableWrapper} cb={this.showRender} loadModule={this.loadModule} httpClient={this.state.httpClient}/>;
 
   selectRender() {
     return (
@@ -58,6 +61,9 @@ class App extends Component {
         </li>
         <li onClick={() => this.setState({view: this.ownerInformationView})}>
           <img className="Select-image" src={ownerInformationPicture} alt="Accèder aux information de votre centre" />
+        </li>
+        <li onClick={() => this.setState({view: this.healthStableInformation})}>
+          <img className="Select-image" src={healthStableInformationPicture} alt="Accèder aux information sanitaire de votre centre" />
         </li>
       </ul>
     );
