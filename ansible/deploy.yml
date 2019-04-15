@@ -1,0 +1,55 @@
+---
+- hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: update cache
+    apt: name=python-software-properties state=present update_cache=yes cache_valid_time=43200
+  - name: install packages
+    apt: name={{item}} state=installed
+    with_items:
+      - python3-pip
+      - python3-dev
+      - python3-setuptools
+      - python-setuptools
+      - virtualenv
+      - nginx
+      - git
+
+- hosts: webservers
+  tasks:
+  - name: clone repo
+    git:
+      repo: 'https://github.com/{{ github_user }}/{{ app_name }}.git'
+      dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
+      update: yes
+  - name: install modules in a virtualenv
+    pip:
+      requirements: /home/{{ ansible_ssh_user }}/{{ app_name }}/apis/requirements.txt
+      virtualenv: /home/{{ ansible_ssh_user }}/{{ app_name }}/apis/env
+      virtualenv_python: python3.5
+
+- hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: template systemd service config
+    template:
+      src: .service
+      dest: /etc/systemd/system/{{ app_name }}.service
+  - name: start systemd app service
+    systemd: name={{ app_name }}.service state=restarted enabled=yes
+  - name: template nginx site config
+    template:
+      src: .nginx
+      dest: /etc/nginx/sites-available/{{ app_name }}
+  - name: remove default nginx site config
+    file: path=/etc/nginx/sites-enabled/default state=absent
+  - name: enable nginx site
+    file:
+      src: /etc/nginx/sites-available/{{ app_name }}
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+      force: yes
+  - name: restart nginx
+    systemd: name=nginx state=restarted enabled=yes

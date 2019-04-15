@@ -1,0 +1,9 @@
+[webservers]
+# Add hosts here
+42.42.42.42
+
+[webservers:vars]
+ansible_ssh_user=foo
+github_user=foo
+app_name=foo
+jwt_secret_key=foo

@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve {{ app_name }}
+After=network.target
+
+[Service]
+User={{ ansible_ssh_user }}
+Group=www-data
+WorkingDirectory=/home/{{ ansible_ssh_user }}/{{ app_name }}/apis
+Environment="PATH=/home/{{ ansible_ssh_user }}/{{ app_name }}/apis/env/bin" "JWT_SECRET_KEY={{ jwt_secret_key }}"
+ExecStart=/home/{{ ansible_ssh_user }}/{{ app_name }}/apis/env/bin/uwsgi --ini {{ app_name }}.ini
+
+[Install]
+WantedBy=multi-user.target
