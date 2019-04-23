@@ -1,5 +1,6 @@
 server {
     listen 80;
+    server_name api.marengo-ledm.eu;
 
     location / {
         include uwsgi_params;
