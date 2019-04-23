@@ -2,8 +2,10 @@ server {
     listen 80;
     server_name marengo-ledm.eu www.marengo-ledm.eu;
 
-    root /home/{{ ansible_ssh_user }};
-    index test.html;
+    root /var/www/build;
+    index index.html;
+    location / {
+    }
 }
 
 server {
