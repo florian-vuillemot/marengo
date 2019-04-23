@@ -1,5 +1,13 @@
 server {
     listen 80;
+    server_name marengo-ledm.eu www.marengo-ledm.eu;
+
+    root /home/{{ ansible_ssh_user }};
+    index test.html;
+}
+
+server {
+    listen 80;
     server_name api.marengo-ledm.eu;
 
     location / {
