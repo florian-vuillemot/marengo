@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 const axios = require('axios');
 
-const baseURL = 'http://api.marengo-ledm.eu';
+const baseURL = 'https://api.marengo-ledm.eu';
 const httpClient = axios.create({
   baseURL: baseURL,
 });
