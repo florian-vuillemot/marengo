@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name marengo-ledm.eu www.marengo-ledm.eu;
+
+    root /var/www/build;
+    index index.html;
+    location / {
+    }
+}
+
+server {
+    listen 80;
+    server_name api.marengo-ledm.eu;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:///home/{{ ansible_ssh_user }}/{{ app_name }}/apis/{{ app_name }}.sock;
+    }
+}

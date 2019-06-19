@@ -1,0 +1,74 @@
+---
+- hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: download nodejs version
+    command: curl -sL https://deb.nodesource.com/setup_8.x -o /home/{{ ansible_ssh_user }}/nodesource_setup.sh
+  - name: configure os for last nodejs version
+    command: bash /home/{{ ansible_ssh_user }}/nodesource_setup.sh
+  - apt_repository:
+      repo: ppa:jonathonf/python-3.6
+      state: present
+  - name: update cache
+    apt: name=python-software-properties state=present update_cache=yes cache_valid_time=43200
+  - name: install packages
+    apt: name={{item}} state=installed
+    with_items:
+      - python3.6
+      - python3-pip
+      - python3.6-dev
+      - python3-setuptools
+      - virtualenv
+      - nginx
+      - git
+      - nodejs
+
+- hosts: webservers
+  tasks:
+  - name: clone repo
+    git:
+      repo: 'https://github.com/{{ github_user }}/{{ app_name }}.git'
+      dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
+      update: yes
+      force: yes
+  - name: install modules in a virtualenv
+    pip:
+      requirements: /home/{{ ansible_ssh_user }}/{{ app_name }}/apis/requirements.txt
+      virtualenv: /home/{{ ansible_ssh_user }}/{{ app_name }}/apis/env
+      virtualenv_python: python3.6
+
+- hosts: webservers
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: install front app deps
+    command: chdir=/home/{{ ansible_ssh_user }}/{{ app_name }}/front/{{ app_name }} npm install
+  - name: build front app
+    command: chdir=/home/{{ ansible_ssh_user }}/{{ app_name }}/front/{{ app_name }} npm run build
+  - name: remove build rendering
+    file:
+      path: /var/www/build
+      state: absent
+  - name: move build repo
+    command: mv /home/{{ ansible_ssh_user }}/{{ app_name }}/front/{{ app_name }}/build /var/www/
+  - name: template systemd service config
+    template:
+      src: .service
+      dest: /etc/systemd/system/{{ app_name }}.service
+  - name: start systemd app service
+    systemd: name={{ app_name }}.service state=restarted enabled=yes
+  - name: template nginx site config
+    template:
+      src: .nginx
+      dest: /etc/nginx/sites-available/{{ app_name }}
+  - name: remove default nginx site config
+    file: path=/etc/nginx/sites-enabled/default state=absent
+  - name: enable nginx site
+    file:
+      src: /etc/nginx/sites-available/{{ app_name }}
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+      force: yes
+  - name: restart nginx
+    systemd: name=nginx state=restarted enabled=yes
